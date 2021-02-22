@@ -175,6 +175,7 @@ addTagElement.addEventListener('click', function(e) {
   userEnteredTags.push(document.querySelector('#tag').value);
   // clear the input box
   document.querySelector('#tag').value = '';
+  document.querySelector('#user-taglist').innerHTML = userEnteredTags;
 })
 
 // Triggered when a file is selected via the media picker.
@@ -242,7 +243,6 @@ function getRelevantPhotos() {
 
 // Appends a photo to the photo gallery section
 function showPhoto(imgSrc) {
-  console.log("showing a photo");
   var img = new Image();
   img.src = imgSrc;
   document.querySelector('#photos').append(img);
@@ -269,6 +269,7 @@ function saveImageMessage(file) {
       // 3 - Generate a public URL for the file.
       return fileSnapshot.ref.getDownloadURL().then((url) => {
         showModal(url);
+        // TODO: don't show the photo now if on the search page.
         showPhoto(url);
         // 4 - Update the file url placeholder with the image’s URL.
         return photoRef.update({

@@ -39,34 +39,39 @@
           </header>
           <!-- SIDEBAR -->
           <div id="sidebar">
-              <button id="my-photos" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--black">My Photos</button>
               <button id="all-photos" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--black">All Photos</button>
+              <button id="my-photos" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--black">My Photos</button>
               <!-- IMAGE UPLOAD FORM -->
                 <form id="image-form" action="#">
                     <input id="mediaCapture" type="file" accept="image/*" capture="camera">
                     <button id="upload-photo" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--black">Upload Photo</button>
                 </form>
           </div>
-
-          <!-- Modal content -->
-          <div id="myModal" class="modal" hidden>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="close">&times;</span>
-                    <h4>Add tags to the image</h4>
-                </div>
-                <div class="modal-body">
-                    <img id="modal-image" src="">
-                    <input id="tag" type="text" />
-                    <input id="add-tag-button" type="submit" value="Add Tag">
+         <div id="photos-and-modal">
+            <!-- Modal content -->
+            <div id="myModal" class="modal" hidden>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">Done Adding Tags</span>
+                        <h4>Add tags to the image</h4>
+                    </div>
+                    <div class="modal-body">
+                        <img id="modal-image" src="">
+                        <input id="tag" type="text" />
+                        <input id="add-tag-button" type="submit" value="Add Tag">
+                        <div id="tag-display">
+                            <div>User-Entered Tags: </div>
+                            <div id="user-taglist"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        
+            <!-- IMAGE GALLERY -->
+            <section id="photos">
+                
+            </section>
         </div>
-      
-          <!-- IMAGE GALLERY -->
-          <section id="photos">
-              
-          </section>
 
           <!-- OTHER -->
           <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
