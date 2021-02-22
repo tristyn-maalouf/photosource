@@ -201,7 +201,7 @@ function onMediaFileSelected(event) {
   }
 }
 
-// TODO
+// Triggered when the user clicks the "My Photos" button.
 function getUsersPhotos() {
   console.log("getting user's photos");
   // query for all photos where email = firebase.auth().currentUser.email
@@ -212,24 +212,22 @@ function getUsersPhotos() {
         showPhoto(documentSnapshot.data().imageUrl);
       });
     });
-  // showPhotos(queryResult);
 }
 
-// TODO
+// Triggered on window load and when the user clicks the "All Photos" button.
 async function getAllPhotos() {
   console.log("getting all photos");
-  // query for all photos 
-  var query = firebase.firestore().collection('photos').orderBy('timestamp', 'desc').limit(100);
-  // Start listening to the query.
-  await query.onSnapshot(function(snapshot) {
-    snapshot.docChanges().forEach(function(change) {
-      var photoData = change.doc.data();
-      showPhoto(photoData.imageUrl);
-    });
-  });
+  // Query for 100 most recently uploaded images.  
+  firebase.firestore().collection('photos').orderBy('timestamp', 'desc').limit(100).get()
+  .then(querySnapshot => {
+      querySnapshot.forEach(documentSnapshot => {
+        var photoData = documentSnapshot.data();
+        showPhoto(photoData.imageUrl);
+      })
+  })
 }
 
-// TODO
+// Triggered when a user enters a search term and clicks "Search" from the top bar.
 function getRelevantPhotos() {
   console.log("getting relevant photos");
   var searchString = document.querySelector('#search-string').value;
@@ -240,9 +238,6 @@ function getRelevantPhotos() {
         showPhoto(documentSnapshot.data().imageUrl);
       });
     });
-  
-  // TODO
-  // showPhotos(queryResult);
 }
 
 // Appends a photo to the photo gallery section
@@ -257,7 +252,6 @@ function getRandomSize(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
 
-// TODO: Generate tags before saving the photo
 // Saves a new message containing an image in Firebase.
 // This first saves the image in Firebase storage.
 function saveImageMessage(file) {
@@ -274,7 +268,8 @@ function saveImageMessage(file) {
     return firebase.storage().ref(filePath).put(file).then(function(fileSnapshot) {
       // 3 - Generate a public URL for the file.
       return fileSnapshot.ref.getDownloadURL().then((url) => {
-        addImageTags(url);
+        showModal(url);
+        showPhoto(url);
         // 4 - Update the file url placeholder with the image’s URL.
         return photoRef.update({
           imageUrl: url,
@@ -306,9 +301,9 @@ window.onclick = function(event) {
   }
 }
 
-function addImageTags(imageUrl){
+function showModal(imageUrl){
   console.log("adding image tags");
-  //modalImageElement.src = imageUrl;
+  modalImageElement.src = imageUrl;
   modal.style.display = "block";
   modal.removeAttribute('hidden');
   userEnteredTags = [];
