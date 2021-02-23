@@ -15,10 +15,13 @@ var mediaCaptureElement = document.getElementById('mediaCapture');
 var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 var modal = document.getElementById("myModal");
 var modalImageElement = document.getElementById("modal-image");
+var compareImageElement = document.getElementById("compare-image");
+var modalMessageElement = document.getElementById("modal-message");
 var userEnteredTagElement = document.getElementById("tag");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+var spanCancel = document.getElementsByClassName("close-cancel")[0];
 
 // A loading image URL.
 var LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif?a';
@@ -190,6 +193,8 @@ addTagElement.addEventListener('click', function(e) {
 async function onMediaFileSelected(event) {
   event.preventDefault();
   var file = event.target.files[0];
+  compareImageElement.setAttribute('hidden', 'true');
+  modalMessageElement.setAttribute('hidden', 'true');
 
   // Clear the selection in the file picker input.
   imageFormElement.reset();
@@ -205,11 +210,6 @@ async function onMediaFileSelected(event) {
   }
   // Check if the user is signed-in
   if (!checkSignedInWithMessage()) {
-    var data = {
-      message: 'You must sign in to upload an image',
-      timeout: 2000
-    };
-    signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
     return;
   }
   // Check if the file already exists in PhotoSource.
@@ -221,12 +221,12 @@ async function onMediaFileSelected(event) {
          if(querySnapshot.empty){
            saveImageMessage(file);
          } else {
-          var data = {
-            message: 'This image already exists in PhotoSource',
-            timeout: 2000
-          };
-          signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
-          return;
+          querySnapshot.forEach(documentSnapshot => {
+            compareImageElement.src = documentSnapshot.data().imageUrl;
+          });
+          compareImageElement.removeAttribute('hidden');
+          modalMessageElement.removeAttribute('hidden');
+          saveImageMessage(file);
          }
        });
    
@@ -333,6 +333,13 @@ span.onclick = function() {
     tags: userEnteredTags
   };
   firebase.firestore().collection('photos').doc(photoRefId).update(data);
+}
+
+// When the user clicks on <span-cancel> (x), close the modal and do not save image
+spanCancel.onclick = function() {
+  modal.style.display = "none";
+  console.log("Cancelling image");
+  firebase.firestore().collection('photos').doc(photoRefId).delete();
 }
 
 // When the user clicks anywhere outside of the modal, close it

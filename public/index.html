@@ -52,11 +52,16 @@
             <div id="myModal" class="modal" hidden>
                 <div class="modal-content">
                     <div class="modal-header">
-                        <span class="close">Done Adding Tags</span>
+                        <span class="close">Save Image</span>
+                        <span class="close-cancel">Cancel</span>
                         <h4>Add tags to the image</h4>
                     </div>
                     <div class="modal-body">
-                        <img id="modal-image" src="">
+                        <div hidden id="modal-message">Heads up -- looks like this photo may aleady exist in PhotoSource. Found similar image:</div>
+                        <div id="modal-images">
+                            <img id="modal-image" src="">
+                            <img hidden id="compare-image" src="https://via.placeholder.com/150">
+                        </div>
                         <input id="tag" type="text" />
                         <input id="add-tag-button" type="submit" value="Add Tag">
                         <div id="tag-display">
