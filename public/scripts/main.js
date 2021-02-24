@@ -270,6 +270,7 @@ function getRelevantPhotos() {
 function showPhoto(imgSrc) {
   var img = new Image();
   img.src = imgSrc;
+  img.className = "galleryImage";
   document.querySelector('#photos').append(img);
 }
 
@@ -291,7 +292,7 @@ function saveImageMessage(file) {
     combinedTags: emptyTagList
   }).then(function(photoRef) {
     photoRefId = photoRef.id;
-    setAutoTags(photoRefId);
+    displayAutoTags(photoRefId);
     var filePath = firebase.auth().currentUser.uid + '/' + photoRef.id + '/' + file.name;
     return firebase.storage().ref(filePath).put(file).then(function(fileSnapshot) {
       // 3 - Generate a public URL for the file.
@@ -314,11 +315,12 @@ function saveImageMessage(file) {
   });
 }
 
-function setAutoTags(id){
+// Display auto-generated tags in the modal as soon as they are available.
+function displayAutoTags(id){
   var tags = [];
   console.log("now querying for autoTags with id " + id);
 
-  // Create the query to load the last 12 messages and listen for new ones.
+  // Create the query to load the auto-generated tags for the image.
   var query = firebase.firestore().collection('photos').where('id', '==', id);
   // Start listening to the query.
   const unsub = query.onSnapshot(function(snapshot) {
@@ -368,6 +370,7 @@ window.onclick = function(event) {
   }
 }
 
+// Display the modal to allow the user to add tags and save the image.
 function showModal(imageUrl){
   console.log("adding image tags");
   modalImageElement.src = imageUrl;

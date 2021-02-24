@@ -1,7 +1,6 @@
 
 html, body {
     font-family: 'Roboto', 'Helvetica', sans-serif;
-    /* position: relative; */
 }
 
 .close-cancel {
@@ -20,7 +19,6 @@ html, body {
 
 
 /* SEARCH BAR */
-
 input{
     border: none;
     padding: 10px;
@@ -82,10 +80,6 @@ input[type="submit"]:hover {
 #sign-out, #user-pic, #user-name {
     display: inline-block;
 }
-
-/* #user-pic, #user-name {
-    display: inline-block;
-} */
 
 #user-pic {
   visibility: visible;
@@ -191,18 +185,11 @@ main, #messages-card {
   }
   #image-form {
     display: inline-block;
-    /* display: flex;
-    flex-direction: row; */
-    /* width: 48px; */
-    /* float: right; */
   }
   #message-form .mdl-textfield {
     width: calc(100% - 100px);
   }
-  /* #message-form button, #image-form button {
-    /* width: 100px;
-    margin: 15px 0 0 10px; 
-  } */
+
   .mdl-card {
     min-height: 0;
   }
@@ -363,7 +350,6 @@ main, #messages-card {
  /* Just in case there are inline attributes */
  width: 100% !important;
  height: auto !important;
- /* top:0px !important; */
 }
 
 @media (max-width: 1200px) {
@@ -399,8 +385,4 @@ body {
  margin: 0;
  padding: 0;
 }
-
-/* #photos-and-modal {
-  display: flex;
-} */
 
