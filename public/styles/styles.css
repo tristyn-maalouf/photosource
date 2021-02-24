@@ -331,8 +331,13 @@ main, #messages-card {
   animation-duration: 0.4s
 }
 
-#tag-display {
+#tag-display #auto-tag-display {
   display:inline-block;
+}
+
+.taglist-title {
+  font: italic;
+  font-size: medium;
 }
 
 /* Add Animation */

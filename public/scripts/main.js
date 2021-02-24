@@ -185,7 +185,7 @@ addTagElement.addEventListener('click', function(e) {
   userEnteredTags.push(document.querySelector('#tag').value);
   // clear the input box
   document.querySelector('#tag').value = '';
-  document.querySelector('#user-taglist').innerHTML = userEnteredTags;
+  document.querySelector('#user-taglist').innerHTML = userEnteredTags.join(", ");
 })
 
 // Triggered when a file is selected via the media picker.
@@ -215,17 +215,17 @@ async function onMediaFileSelected(event) {
   var base64 = await toBase64(file);
   var md5Value = MD5(base64);
   imgEncoding = md5Value;
-     firebase.firestore().collection('photos').where('imageEncoding', '==', md5Value).get()
-       .then(querySnapshot => {
-         if(querySnapshot.empty){
-           saveImageMessage(file);
-         } else {
-          compareImageElement.src = querySnapshot.docs[0].data().imageUrl;
-          compareImageElement.removeAttribute('hidden');
-          modalMessageElement.removeAttribute('hidden');
-          saveImageMessage(file);
-         }
-       });
+  firebase.firestore().collection('photos').where('imageEncoding', '==', md5Value).get()
+    .then(querySnapshot => {
+      if(querySnapshot.empty){
+        saveImageMessage(file);
+      } else {
+      compareImageElement.src = querySnapshot.docs[0].data().imageUrl;
+      compareImageElement.removeAttribute('hidden');
+      modalMessageElement.removeAttribute('hidden');
+      saveImageMessage(file);
+      }
+    });
    
 }
 
@@ -291,8 +291,8 @@ function saveImageMessage(file) {
     combinedTags: emptyTagList
   }).then(function(photoRef) {
     photoRefId = photoRef.id;
+    setAutoTags(photoRefId);
     var filePath = firebase.auth().currentUser.uid + '/' + photoRef.id + '/' + file.name;
-    console.log("file path: " + filePath);
     return firebase.storage().ref(filePath).put(file).then(function(fileSnapshot) {
       // 3 - Generate a public URL for the file.
       return fileSnapshot.ref.getDownloadURL().then((url) => {
@@ -311,6 +311,27 @@ function saveImageMessage(file) {
     });
   }).catch(function(error) {
     console.error('There was an error uploading a file to Cloud Storage:', error);
+  });
+}
+
+function setAutoTags(id){
+  var tags = [];
+  console.log("now querying for autoTags with id " + id);
+
+  // Create the query to load the last 12 messages and listen for new ones.
+  var query = firebase.firestore().collection('photos').where('id', '==', id);
+  // Start listening to the query.
+  const unsub = query.onSnapshot(function(snapshot) {
+    snapshot.docChanges().forEach(function(change) {
+      console.log("found change: " + change.doc.data().autoTags)
+      tags.push(change.doc.data().autoTags);
+      var filtered = tags.filter(function(x) {
+        return (x !== undefined) && (x !== '');
+      });
+      var str = filtered.toString();
+      var arr = str.split(",");
+      document.querySelector('#auto-taglist').innerHTML = arr.join(", "); 
+    });
   });
 }
 
@@ -351,6 +372,7 @@ function showModal(imageUrl){
   console.log("adding image tags");
   modalImageElement.src = imageUrl;
   document.querySelector('#user-taglist').innerHTML = '';
+  document.querySelector('#auto-taglist').innerHTML = '';
   modal.style.display = "block";
   modal.removeAttribute('hidden');
   userEnteredTags = [];
