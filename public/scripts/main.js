@@ -18,6 +18,7 @@ var modalImageElement = document.getElementById("modal-image");
 var compareImageElement = document.getElementById("compare-image");
 var modalMessageElement = document.getElementById("modal-message");
 var userEnteredTagElement = document.getElementById("tag");
+var allImageElements = document.getElementsByTagName("img");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
@@ -268,10 +269,14 @@ function getRelevantPhotos() {
 
 // Appends a photo to the photo gallery section
 function showPhoto(imgSrc) {
+  var a = document.createElement('a');
+  a.href = imgSrc;
+  a.target = "_blank";
   var img = new Image();
   img.src = imgSrc;
   img.className = "galleryImage";
-  document.querySelector('#photos').append(img);
+  a.appendChild(img);
+  document.querySelector('#photos').append(a);
 }
 
 function getRandomSize(min, max) {
