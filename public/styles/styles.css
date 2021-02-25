@@ -198,10 +198,10 @@ main, #messages-card {
     justify-content: space-between;
   }
   #user-container {
-    position: absolute;
+    position: absolute; 
     display: flex;
     flex-direction: row;
-    top: 22px;
+    top: 40px;
     width: 100%;
     right: 0;
     padding-left: 10px;
